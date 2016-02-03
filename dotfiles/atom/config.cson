@@ -1,0 +1,120 @@
+"*":
+  editor:
+    fontSize: 16
+    fontFamily: "Source Code Pro"
+    invisibles: {}
+    preferredLineLength: 200
+    showIndentGuide: true
+    tabLength: 1
+    scrollPastEnd: true
+    showInvisibles: true
+  core:
+    themes: [
+      "atom-material-ui"
+      "oceanic-next"
+    ]
+    ignoredNames: [
+      ".git"
+      ".sass-cache/"
+      ".DS_Store"
+      ".subl*.tmp"
+    ]
+    disabledPackages: [
+      "es-navigation"
+      "remember-session"
+      "terminal-status"
+      "linter-scss-lint"
+      "highlight-selected"
+    ]
+    audioBeep: false
+  "exception-reporting":
+    userId: "ffcf595a-186d-9537-d1a6-a380adf4c30a"
+  welcome:
+    showOnStartup: false
+  metrics:
+    userId: "d81f0e543bf5a236e52b74100a71fb5d80dfcb74"
+  "atom-beautify":
+    _analyticsUserId: "308ad7ab-a415-4dc7-bf33-2a0ce06e4ca4"
+    css_indent_size: 2
+    html_indent_size: 1
+    js_indent_size: 1
+  "remember-session":
+    path: "/Volumes/styleguide/site"
+    x: 4
+    y: 23
+    width: 1436
+    height: 877
+  "js-autoimport":
+    spaceForNamedImports: false
+  "language-babel":
+    disableWhenNoBabelrcFileInPath: true
+    createTargetDirectories: false
+    transpileOnSave: false
+  "atom-material-ui":
+    compactTreeView: true
+    slimScrollbar: true
+    panelContrast: true
+  "linter-jscs":
+    preset: "google"
+    onlyConfig: true
+    esnext: true
+  "atom-css-comb": {}
+  "atom-pair": {}
+  "preview-plus": {}
+  "terminal-status": {}
+  "auto-update-packages": {}
+  linter:
+    lintOnFly: false
+  "autocomplete-plus":
+    autoActivationDelay: 400
+  "linter-scss-lint": {}
+  whitespace:
+    ensureSingleTrailingNewline: false
+  "spell-check": {}
+  "enhanced-package-list": {}
+  "find-and-replace":
+    openProjectFindResultsInRightPane: true
+    scrollToResultOnLiveSearch: true
+  emmet: {}
+  "white-cursor": {}
+  react: {}
+  "toggle-quotes":
+    quoteCharacters: "'\""
+  "jscs-fixer": {}
+  "file-icons":
+    onChanges: true
+  "tree-view": {}
+".cfml.html.text":
+  editor:
+    preferredLineLength: 200
+".babel.regexp.source":
+  editor:
+    preferredLineLength: 200
+".cfm.html.text":
+  editor:
+    preferredLineLength: 200
+".coffee.jsx.source":
+  editor:
+    preferredLineLength: 200
+".js.jsx.source":
+  editor:
+    preferredLineLength: 200
+".cfscript.source":
+  editor:
+    preferredLineLength: 200
+".cfml.source":
+  editor:
+    preferredLineLength: 200
+".source.stylus":
+  editor:
+    tabLength: 2
+    preferredLineLength: 200
+".source.styl":
+  editor:
+    tabLength: 2
+".scss.source":
+  editor:
+    tabLength: 2
+".jsx.source":
+  editor:
+    tabLength: 2

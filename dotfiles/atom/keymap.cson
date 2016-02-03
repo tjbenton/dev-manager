@@ -1,0 +1,39 @@
+# Your keymap
+#
+# Atom keymaps work similarly to stylesheets. Just as stylesheets use selectors
+# to apply styles to elements, Atom keymaps use selectors to associate
+# keystrokes with events in specific contexts.
+#
+# You can create a new keybinding in this file by typing "key" and then hitting
+# tab.
+#
+# Here"s an example taken from Atom"s built-in keymap:
+#
+# ".editor":
+#   "enter": "editor:newline"
+#
+# ".workspace":
+#   "ctrl-P": "core:move-up"
+#   "ctrl-p": "core:move-down"
+
+".platform-darwin atom-text-editor":
+  "alt-cmd-g": "find-and-replace:select-all"
+
+".platform-darwin atom-text-editor:not([mini])":
+  "alt-cmd-up": "editor:add-selection-above"
+  "alt-cmd-down": "editor:add-selection-below"
+  # Key bindings for multi-cursor
+  "ctrl-alt-up": "multi-cursor-plus:move-up"
+  "ctrl-alt-down": "multi-cursor-plus:move-down"
+  "ctrl-alt-left": "multi-cursor-plus:move-left"
+  "ctrl-alt-right": "multi-cursor-plus:move-right"
+  "ctrl-alt-cmd-left": "multi-cursor-plus:move-to-beginning-of-word"
+  "ctrl-alt-cmd-right": "multi-cursor-plus:move-to-end-of-word"
+  "alt-home": "multi-cursor-plus:move-to-first-character-of-line"
+  "alt-end": "multi-cursor-plus:move-to-end-of-line"
+  "shift-ctrl-alt-left": "multi-cursor-plus:select-to-beginning-of-word"
+  "shift-ctrl-alt-right": "multi-cursor-plus:select-to-end-of-word"
+  "shift-alt-home": "multi-cursor-plus:select-to-first-character-of-line"
+  "shift-alt-end": "multi-cursor-plus:select-to-end-of-line"
+  # toggling quotes
+  "cmd-'": "toggle-quotes:toggle"
