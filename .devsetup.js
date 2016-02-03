@@ -21,18 +21,18 @@ module.exports = {
       'coreutils', // Install GNU core utilities (those that come with OS X are outdated)
       'moreutils', // Install some other useful utilities like `sponge`
       'findutils', // Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed
-      'gnu-sed --default-names', // Install GNU `sed`, overwriting the built-in `sed`
+      ['gnu-sed', 'gnu-sed --default-names'], // Install GNU `sed`, overwriting the built-in `sed`
       'bash', // Install Bash 4
-      'wget --with-iri', // Install wget with IRI support
+      ['wget', 'wget --with-iri'], // Install wget with IRI support
       'bash-completion',
 
       // Install more recent versions of some OS X tools.
-      'vim --override-system-vi',
+      ['vim', 'vim --override-system-vi'],
       'grep',
       'openssh',
       'screen',
-      'homebrew/php/php55 --with-gmp',
-
+      ['php55', 'homebrew/php/php55 --with-gmp'],
+      'thefuck', // Magnificent app which corrects your previous console command
       // Apache ant
       'ant',
 
@@ -55,7 +55,7 @@ module.exports = {
       'nvm', // [node version manager](https://github.com/creationix/nvm) Simple bash script to manage multiple active node.js versions
       'tree', // [tree](http://mama.indstate.edu/users/ice/tree/) will print the directory tree
       'webkit2png', // [webkit2png](http://www.paulhammond.org/webkit2png/) will take screenshots of a webpage via the command line
-      'imagemagick --with-webp', // [imagemagick](http://www.imagemagick.org) can do almost anything with images including changing the format to over 100 different types. It's useful on batch updates
+      ['imagemagick', 'imagemagick --with-webp'], // [imagemagick](http://www.imagemagick.org) can do almost anything with images including changing the format to over 100 different types. It's useful on batch updates
       'rename', // [rename](http://plasmasturm.org/code/rename) This is very useful when you need to rename hundreds of files/folders
       'git',
       'git-extras',
@@ -94,7 +94,6 @@ module.exports = {
       'elasticsearch',
       'gdbm',
       'isl011',
-      'php55',
       'rbenv',
       'cairo',
       'emacs',
@@ -124,7 +123,7 @@ module.exports = {
       'vips',
       'zopfli',
       'boot2docker',
-      'http://downloads.ortussolutions.com/ortussolutions/commandbox/commandbox.rb',
+      [ 'commandbox', 'http://downloads.ortussolutions.com/ortussolutions/commandbox/commandbox.rb' ],
       'fontconfig',
       'harfbuzz',
       'libffi',
