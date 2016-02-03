@@ -179,10 +179,8 @@ alias bcui="bcc uninstall"
 alias mount="~/bin/mount.sh"
 
 # shortcut for coldfusion commands
-if [ -e "~/Applications/ColdFusion*/cfusion/bin/coldfusion" &> /dev/null ]; then
-  alias coldfusion="sudo /Applications/ColdFusion11/cfusion/bin/coldfusion"
-  alias cf="coldfusion"
-fi
+alias cf="sudo /Applications/ColdFusion11/cfusion/bin/coldfusion"
+alias coldfusion="cf"
 
 if [ $(which apachectl) &> /dev/null ]; then
   # shortcut for apache commands

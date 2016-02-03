@@ -3,7 +3,7 @@
 
 # Load ~/.bash_prompt, ~/.bash_exports, ~/.bash_aliases, ~/.bash_functions and ~/.bash_extras
 # ~/.bash_extras can be used for settings you don’t want to commit
-for file in ~/.{bash_prompt,bash_exports,bash_aliases,bash_functions}; do
+for file in ~/.{bash_exports,bash_aliases,bash_functions}; do
   if [ -r "$file" ]; then
     source "$file"
   fi
@@ -47,11 +47,6 @@ elif [ -f /etc/bash_completion ]; then
   source /etc/bash_completion;
 fi;
 
-# Enable tab completion for `g` by marking it as an alias for `git`
-if type _git &> /dev/null && [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
-  complete -o default -o nospace -F _git g;
-fi;
-
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
@@ -60,9 +55,6 @@ export LANG="en_US"
 if [ -e "$HOME/.ssh/config" ]; then
   complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2- | tr ' ' '\n')" scp sftp ssh;
 fi
-
-# Add `killall` tab completion for common apps
-complete -o "nospace" -W "Finder Dock Mail Safari iTunes iCal Address\ Book SystemUIServer" killall
 
 # Enable node version manager completion
 if [[ -r $NVM_DIR/bash_completion ]]; then
@@ -74,18 +66,13 @@ if [ -f $(brew --prefix nvm)/nvm.sh ]; then
   source $(brew --prefix nvm)/nvm.sh
 fi
 
-# Enable git completion
-if [ -f $HOME/.git_completion.sh ]; then
-  source $HOME/.git_completion.sh
-fi
-
 
 # Add tab completion for `defaults read|write NSGlobalDomain`
 # You could just use `-g` instead, but I like being explicit
-complete -W "NSGlobalDomain" defaults;
+# complete -W "NSGlobalDomain" defaults;
 
 # Add `killall` tab completion for common apps
-complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter" killall;
+# complete -o "nospace" -W "Contacts Calendar Dock Finder Mail Safari Chrome iTunes SystemUIServer Terminal iTerm" killall;
 
 # Load RVM into a shell session as a function
 if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
@@ -95,7 +82,6 @@ fi
 
 # zsh settings
 if [ -n "$ZSH_VERSION" ]; then
-  echo "It's a zsh shell yo"
   # a better default theme
   ZSH_THEME="mh"
 
@@ -107,9 +93,11 @@ if [ -n "$ZSH_VERSION" ]; then
   # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
   HIST_STAMPS="mm/dd/yyyy"
 
-  plugins=(git brew npm bash z zsh-syntax-highlighting)
+  plugins=(git brew npm bash z)
 
   source $ZSH/oh-my-zsh.sh
+
+  source ~/.oh-my-zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
   # load user specific settings for zsh
   if [ -r "~/.zsh_extras" ]; then
@@ -125,9 +113,19 @@ elif [ -n "$BASH_VERSION" ]; then
     fi
   fi
 
+  # Enable git completion
+  if [ -f $HOME/.git_completion.sh ]; then
+    source $HOME/.git_completion.sh
+  fi
+
+  # Enable tab completion for `g` by marking it as an alias for `git`
+  if type _git &> /dev/null && [ -f /usr/local/etc/bash_completion.d/git-completion.bash ]; then
+    complete -o default -o nospace -F _git g;
+  fi;
+
+
   # load user specific settings for bash
   if [ -r "~/.bash_extras" ]; then
     source ~/.bash_extras
   fi
 fi
-
