@@ -5,23 +5,27 @@
 // ps -o comm= -p $$
 
 const co = require('co');
-const fs = require('co-fs-extra');
+// const fs = require('co-fs-extra');
 const path = require('path');
 const root = process.env.HOME;
 
 const brew = require('./brew.js');
+const npm = require('./npm.js');
 
-module.exports = co.wrap(function *devsetup(options) {
-  let settings = require(path.join(__dirname, '.devsetup.js'));
+module.exports = co.wrap(function *devsetup() {
+  var settings = require(path.join(__dirname, '.devsetup.js'));
   try {
-    // console.log(path.join(root, '.devsetup', '.devsetup.js'));
-    let user_settings = require(path.join(root, '.devsetup', '.devsetup.js'))
+    const user_settings = require(path.join(root, '.devsetup', '.devsetup.js'));
 
-    Object.assign(settings, user_settings);
-  } catch(e) { }
+    settings = Object.assign(settings, user_settings);
+  } catch (err) {
+    // do nothing because the user settings don't exist
+  };
 
-
-  yield brew(settings.brew)
+  yield [
+    brew(settings.brew),
+    npm(settings.brew)
+  ];
 
   console.log('install ended yo');
 });
