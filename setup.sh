@@ -76,13 +76,24 @@ fi
 
 if [ ! $(brew list | grep '^nvm$') ];
   then
+    # install nvm
     brew install nvm
+    # loads nvm so we can install different versions in this shell
+    # before the dot files are loaded
+    export NVM_DIR=~/.nvm
+    . $(brew --prefix nvm)/nvm.sh
+
     nvm install v5
     nvm use v5
+    nvm alias default node
   else
     echo 'nvm is already installed'
 fi
 
+# remove
+export NVM_DIR=~/.nvm
+. $(brew --prefix nvm)/nvm.sh
+# /remove
 
 # run the setup script
 npm install
