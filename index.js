@@ -4,16 +4,24 @@
 // check to see which shell is currently running
 // ps -o comm= -p $$
 
-var co = require('co');
-var fs = require('co-fs-extra');
+const co = require('co');
+const fs = require('co-fs-extra');
+const path = require('path');
+const root = process.env.HOME;
 
-module.exports = co.wrap(function(options) {
-  console.log(process.cwd());
+const brew = require('./brew.js');
+
+module.exports = co.wrap(function *devsetup(options) {
+  let settings = require(path.join(__dirname, '.devsetup.js'));
   try {
-    // require()
-  } catch(e) {}
+    // console.log(path.join(root, '.devsetup', '.devsetup.js'));
+    let user_settings = require(path.join(root, '.devsetup', '.devsetup.js'))
 
-  // console.log(fs.readFile('.dev-setup.sh'));
-  // yield fs.readFile
-  console.log('whatup');
+    Object.assign(settings, user_settings);
+  } catch(e) { }
+
+
+  yield brew(settings.brew)
+
+  console.log('install ended yo');
 });
