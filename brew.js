@@ -16,12 +16,9 @@ module.exports = co.wrap(function *brew(packages) {
 
 
     var bad_packages = {
-      // formulas: checkForBadPackages(installed.formulas, packages.formulas),
-      formulas: [],
+      formulas: checkForBadPackages(installed.formulas, packages.formulas),
       casks: checkForBadPackages(installed.casks, packages.casks)
     };
-
-    console.log(bad_packages);
 
     var bad_question = 'you have some oudated casks installed would you like to uninstall them?';
     var bad_question_options = {
