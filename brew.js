@@ -1,5 +1,6 @@
 const co = require('co');
 const utils = require('./utils.js');
+const inquire = utils.inquire;
 
 var global = {
   attempts: 0
@@ -15,30 +16,30 @@ module.exports = co.wrap(function *brew(packages) {
 
 
     var bad_packages = {
-      formulas: checkForBadPackages(installed.formulas, packages.formulas),
+      // formulas: checkForBadPackages(installed.formulas, packages.formulas),
+      formulas: [],
       casks: checkForBadPackages(installed.casks, packages.casks)
     };
 
-    var bad_question = 'you have some oudated casks installed would you like to uninstall them? (y/N)';
+    console.log(bad_packages);
+
+    var bad_question = 'you have some oudated casks installed would you like to uninstall them?';
     var bad_question_options = {
-      pattern: /^(?:y|n).+$/i,
       timeout: 10000,
-      before: (input) => input[0].toLowerCase() === 'y',
+      timeout_message: 'Continued on because there was no answer after 10s',
       default: 'no'
     };
 
     if (bad_packages.formulas.length) {
-      var bad_formulas_question = yield utils.prompt(bad_question, bad_question_options);
-
-      if (bad_formulas_question) {
+      var bad_formulas_question = yield inquire.choose(bad_question, [ 'yes', 'no' ], bad_question_options);
+      if (/^y/.test(bad_formulas_question)) {
         yield utils.runArray('brew uninstall', bad_packages.formulas);
       }
     }
 
     if (bad_packages.casks.length) {
-      var bad_casks_question = yield utils.prompt(bad_question, bad_question_options);
-
-      if (bad_casks_question) {
+      var bad_casks_question = yield inquire.choose(bad_question, [ 'yes', 'no' ], bad_question_options);
+      if (/^y/.test(bad_casks_question)) {
         yield utils.runArray('brew cask uninstall', bad_packages.casks);
       }
     }
@@ -87,25 +88,25 @@ module.exports = co.wrap(function *brew(packages) {
 });
 
 function checkForBadPackages(installed, packages) {
-  installed = getBadPackages(installed);
+  const bad_installed_packages = installed
+    .filter((item) => item.indexOf('(!)') > -1)
+    .map((item) => item.split(' ')[0]);
   var result = [];
 
-  if (!installed.length) {
+  // there aren't any bad packages installed
+  if (!bad_installed_packages.length) {
+    console.log('just returned ho');
     return result;
   }
 
-  for (var i = 0; i < installed.length; i++) {
-    if (packages.indexOf(installed[i]) > -1) {
-      result.push(installed[i]);
-    }
-  }
+  // not sure why this was in here so i'm leaving it for now
+  // for (var i = 0; i < bad_installed_packages.length; i++) {
+  //   if (packages.indexOf(bad_installed_packages[i]) > -1) {
+  //     result.push(bad_installed_packages[i]);
+  //   }
+  // }
 
   return result;
-}
-function getBadPackages(packages) {
-  return packages
-    .filter((item) => item.indexOf('(!)') > -1)
-    .map((item) => item.split(' ')[0]);
 }
 
 

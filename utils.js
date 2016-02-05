@@ -1,9 +1,41 @@
 const shell = require('child_process');
 
 
+const inquire = require('inquirer-promise');
+
+function delay(time) {
+  return new Promise((fullfill) => setTimeout(fullfill, time));
+}
+
+inquire.choose = function choose(message, choices, options) {
+  return new Promise((resolve, reject) => {
+    const question = inquire.list(message, choices, options);
+    if (options.timeout && options.default) {
+      const timeout = delay(options.timeout)
+        .then(() => {
+          process.stdin.pause();
+          var timeout_message = options.timeout_message || options.timeoutMessage || options.timeoutmessage || '';
+          process.stdout.write(timeout_message + '\n');
+          return options.default;
+        });
+
+      Promise
+        .race([ timeout, question ])
+        .then(resolve)
+        .catch(reject);
+    } else {
+      question
+        .then(resolve)
+        .catch(reject);
+    }
+  });
+};
+
+
 function *toArray(command) {
   return (yield run(command)).split('\n').filter(Boolean);
 }
+
 
 function *runArray(command, array, log) {
   try {
@@ -41,103 +73,46 @@ function run(command, log) {
   });
 
 
-  command = command.split(' ');
-  var args = command.slice(1);
-  command = command[0];
-
-
-  return new Promise((resolve, reject) => {
-    var current = shell.spawn(command, args);
-    current.stdout.on('data', (data) => {
-      data += '';
-      data = data.split('\n').filter(Boolean).join('\n');
-      log && console.log(data);
-      resolve(data);
-    });
-
-    current.stderr.on('data', (err) => {
-      err += '';
-      err = err.split('\n').filter(Boolean).join('\n');
-      console.error(err);
-      reject(err);
-    });
-
-    current.on('close', (code) => {
-      if (code === 0) {
-        log && console.log('finished:', command, args.join(' '), '\n');
-        resolve();
-      } else {
-        reject(code);
-      }
-    });
-  });
+  // command = command.split(' ');
+  // var args = command.slice(1);
+  // command = command[0];
+  //
+  //
+  // return new Promise((resolve, reject) => {
+  //   var current = shell.spawn(command, args);
+  //   current.stdout.on('data', (data) => {
+  //     data += '';
+  //     data = data.split('\n').filter(Boolean).join('\n');
+  //     log && console.log(data);
+  //     resolve(data);
+  //   });
+  //
+  //   current.stderr.on('data', (err) => {
+  //     err += '';
+  //     err = err.split('\n').filter(Boolean).join('\n');
+  //     console.error(err);
+  //     reject(err);
+  //   });
+  //
+  //   current.on('close', (code) => {
+  //     if (code === 0) {
+  //       log && console.log('finished:', command, args.join(' '), '\n');
+  //       resolve();
+  //     } else {
+  //       reject(code);
+  //     }
+  //   });
+  // });
 };
 
 
-var stdin = stdin;
-var stdout = stdout;
-
-function prompt(question, options) {
-  stdin.setRawMode(true);
-  options = Object.assign({
-    pattern: /^(?:y|n).*$/,
-    error: (input) => input + 'is incorrect, You must enter a value that matches `' + options.pattern.toString() + '`',
-    default: undefined,
-    timeout: undefined,
-    silent: false,
-    before: (input) => input
-  }, options || {});
-
-  var timeout;
-
-  return new Promise((resolve, reject) => {
-    stdout.write(question);
-    stdin.setEncoding('utf8');
-
-    if (
-      options.timeout !== undefined &&
-      options.default !== undefined
-    ) {
-      timeout = setTimeout(() => {
-        stdout
-          .write('\n' + options.default + ': because there wasn\'t an answer after ' + options.timeout + 'ms');
-
-        stdin.pause();
-        resolve(options.default);
-      }, options.timeout);
-    }
-
-    stdin
-      .once('data', (answer) => {
-        clearTimeout(timeout);
-
-        if (
-          (answer.length - 1) === 0 &&
-          options.default !== undefined
-        ) {
-          answer = options.default;
-        }
-
-        if (options.pattern && !options.pattern.test(answer)) {
-          stdout.write(options.error(answer));
-          prompt(question, options);
-        } else {
-          if (!options.silent) {
-            stdout.write(answer);
-          }
-
-          resolve(options.before(answer));
-          stdin.pause();
-        }
-      })
-      .resume();
-  });
-};
-
-
+/* eslint
+   object-shorthand: 0
+*/
 module.exports = {
   toArray: toArray,
   runArray: runArray,
   run: run,
-  prompt: prompt
-}
+  inquire: inquire,
+  delay: delay
+};
