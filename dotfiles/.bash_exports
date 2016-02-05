@@ -8,20 +8,23 @@ export LESS_TERMCAP_md="$ORANGE" # Highlight section titles in manual pages
 
 export HISTIGNORE="ls:ls *:cd:cd -:pwd;exit:date:* --help" # Make some commands not show up in history
 
+# export Node version mananger
+export NVM_DIR=~/.nvm
+
+NODE_DEFAULT_VERSION=$(<"$NVM_DIR/alias/default")
+
 # Add Homebrew `/usr/local/bin` and User `~/bin` to the `$PATH`
 PATH=$(brew --prefix)/sbin:$PATH
 PATH=$(brew --prefix)/bin:$PATH
 PATH=/sbin:$PATH
 PATH=/bin:$PATH
-PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH # See Brewfile
-PATH=./node_modules/.bin:$PATH # adds locally installed node modules to the path
 PATH=/.rvm/bin:$PATH # for RVM only
+PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH # See Brewfile
+PATH="$NVM_DIR/versions/node/v$NODE_DEFAULT_VERSION/bin":$PATH
+PATH=./node_modules/.bin:$PATH # adds locally installed node modules to the path
 export PATH
 
 export MANPATH="/usr/local/man:$MANPATH"
-
-# export Node version mananger
-export NVM_DIR=~/.nvm
 
 # Link Homebrew casks in `/Applications` rather than `~/Applications`
 export HOMEBREW_CASK_OPTS="--appdir=/Applications"
