@@ -1,7 +1,8 @@
-const shell = require('child_process');
-
-
+const child_process = require('child_process');
+const chalk = require('chalk');
 const inquire = require('inquirer-promise');
+
+
 
 function delay(time) {
   return new Promise((fullfill) => setTimeout(fullfill, time));
@@ -13,7 +14,7 @@ inquire.choose = function choose(message, choices, options) {
     if (options.timeout && options.default) {
       const timeout = delay(options.timeout)
         .then(() => {
-          process.stdin.pause();
+          process.stdin.resume();
           var timeout_message = options.timeout_message || options.timeoutMessage || options.timeoutmessage || '';
           process.stdout.write(timeout_message + '\n');
           return options.default;
@@ -37,12 +38,12 @@ function *toArray(command) {
 }
 
 
-function *runArray(command, array, log) {
+function *runArray(command, array, stdio, log) {
   try {
     var commands = [];
     if (array.length) {
       for (var i = 0; i < array.length; i++) {
-        commands.push(run(command.trim() + ' ' + array[i], log));
+        commands.push(run(command.trim() + ' ' + array[i], log, stdio));
       }
 
       return yield commands;
@@ -54,56 +55,75 @@ function *runArray(command, array, log) {
   }
 }
 
+/// @name run
+/// @description
+/// Helper function to command line commands from node in an async way
+/// @arg {string} command - The command you're wanting to run
+/// @arg {string, array} stdio ['inherit'] -
+///  - 'inherit' will let the command that you run to have control over what's output
+///  - 'pipe' will take over the `process.stdout`. This can cause issues if the commands you're running have questions or action items.
+/// @arg {boolean} log [false] - Determins if you want output the stdout or not. Only applies if `stdio` is set to 'pipe'
+function run(command, stdio, log) {
 
-function run(command, log) {
-  log && console.log('started:', command);
+  // enviroment to use where the commands that are run
+  // will output in full color
+  var env = process.env;
+  env.NPM_CONFIG_COLOR = 'always';
+
+  // this lets the command that was run to determin
+  // how the information is output
+  // http://derpturkey.com/retain-tty-when-using-child_proces-spawn/
+  stdio = stdio || 'inherit'
+
+  log && console.log('Started:', chalk.yellow(command));
+  process.stdin.setRawMode(true);
+  process.stdin.setEncoding('utf8');
+
+  command = command.split(' ');
+  var args = command.slice(1);
+  command = command[0];
+
 
   return new Promise((resolve, reject) => {
-    shell.exec(command, (err, stdout, stderr) => {
-      if (err) {
-        console.error(err);
-        reject(stderr);
-        return;
-      }
+    var child = child_process.spawn(command, args, { env: env, stdio: stdio });
 
-      resolve(stdout);
-      log && console.log(stdout.split('\n').filter(Boolean).join('\n'));
-      log && console.log('finished:', command, '\n');
+    if (child.stdout) {
+      child.stdout.on('data', (data) => {
+        data = (data + '').split('\n').filter(Boolean).join('\n');
+        log && process.stdout.write(data);
+        resolve(data);
+      });
+    }
+
+    if (child.stderr) {
+      child.stderr.on('data', (err) => {
+        err = (err + '').split('\n').filter(Boolean).join('\n');
+        console.error(chalk.red('[Error]:'), err);
+        reject(err);
+      });
+    }
+
+    child.on('close', (code) => {
+      log && console.log('finished:', chalk.green(`${command} ${args.join(' ')}`));
+      if (code === 0) {
+        resolve();
+      } else {
+        reject(code);
+      }
     });
   });
-
-
-  // command = command.split(' ');
-  // var args = command.slice(1);
-  // command = command[0];
-  //
-  //
-  // return new Promise((resolve, reject) => {
-  //   var current = shell.spawn(command, args);
-  //   current.stdout.on('data', (data) => {
-  //     data += '';
-  //     data = data.split('\n').filter(Boolean).join('\n');
-  //     log && console.log(data);
-  //     resolve(data);
-  //   });
-  //
-  //   current.stderr.on('data', (err) => {
-  //     err += '';
-  //     err = err.split('\n').filter(Boolean).join('\n');
-  //     console.error(err);
-  //     reject(err);
-  //   });
-  //
-  //   current.on('close', (code) => {
-  //     if (code === 0) {
-  //       log && console.log('finished:', command, args.join(' '), '\n');
-  //       resolve();
-  //     } else {
-  //       reject(code);
-  //     }
-  //   });
-  // });
 };
+
+// catch ctrl+c event and exit normally
+process.on('SIGINT', () => {
+  process.exit(2);
+});
+
+// catch uncaught exceptions, trace, then exit normally
+process.on('uncaughtException', (err) => {
+  console.log(chalk.red('Uncaught Exception:'), err.stack);
+  process.exit(99);
+});
 
 
 /* eslint
