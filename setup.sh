@@ -83,9 +83,9 @@ if [ ! $(brew list | grep '^nvm$') ];
     export NVM_DIR=~/.nvm
     . $(brew --prefix nvm)/nvm.sh
 
-    nvm install v5
-    nvm use v5
-    nvm alias default node
+    nvm install stable
+    nvm use stable
+    nvm alias default stable
   else
     echo 'nvm is already installed'
 fi
