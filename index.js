@@ -9,8 +9,6 @@ const co = require('co');
 const path = require('path');
 const root = process.env.HOME;
 
-const brew = require('./brew.js');
-const npm = require('./npm.js');
 
 module.exports = co.wrap(function *devsetup() {
   var settings = require(path.join(__dirname, '.devsetup.js'));
@@ -22,10 +20,6 @@ module.exports = co.wrap(function *devsetup() {
     // do nothing because the user settings don't exist
   };
 
-  yield [
-    brew(settings.brew),
-    npm(settings.brew)
-  ];
 
   console.log('install ended yo');
 });
