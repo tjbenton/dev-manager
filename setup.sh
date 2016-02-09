@@ -97,4 +97,5 @@ export NVM_DIR=~/.nvm
 
 # run the setup script
 npm install
+npm run compile
 ./bin/dev-setup
