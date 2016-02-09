@@ -43,7 +43,7 @@ function *runArray(command, array, stdio, log) {
     var commands = [];
     if (array.length) {
       for (var i = 0; i < array.length; i++) {
-        commands.push(run(command.trim() + ' ' + array[i], log, stdio));
+        commands.push(run(command.trim() + ' ' + array[i], stdio, log));
       }
 
       return yield commands;
@@ -59,12 +59,11 @@ function *runArray(command, array, stdio, log) {
 /// @description
 /// Helper function to command line commands from node in an async way
 /// @arg {string} command - The command you're wanting to run
-/// @arg {string, array} stdio ['inherit'] -
+/// @arg {string, array, boolean} stdio ['inherit'] -
 ///  - 'inherit' will let the command that you run to have control over what's output
 ///  - 'pipe' will take over the `process.stdout`. This can cause issues if the commands you're running have questions or action items.
 /// @arg {boolean} log [false] - Determins if you want output the stdout or not. Only applies if `stdio` is set to 'pipe'
 function run(command, stdio, log) {
-
   // enviroment to use where the commands that are run
   // will output in full color
   var env = process.env;
@@ -73,7 +72,12 @@ function run(command, stdio, log) {
   // this lets the command that was run to determin
   // how the information is output
   // http://derpturkey.com/retain-tty-when-using-child_proces-spawn/
-  stdio = stdio || 'inherit'
+  if (stdio === false) {
+    stdio = 'pipe';
+  } else if (stdio === true) {
+    stdio = 'inherit';
+  }
+  stdio = stdio || 'inherit';
 
   log && console.log('Started:', chalk.yellow(command));
   process.stdin.setRawMode(true);
@@ -113,17 +117,6 @@ function run(command, stdio, log) {
     });
   });
 };
-
-// catch ctrl+c event and exit normally
-process.on('SIGINT', () => {
-  process.exit(2);
-});
-
-// catch uncaught exceptions, trace, then exit normally
-process.on('uncaughtException', (err) => {
-  console.log(chalk.red('Uncaught Exception:'), err.stack);
-  process.exit(99);
-});
 
 
 /* eslint
