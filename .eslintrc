@@ -19,7 +19,7 @@
     "restParams": true,
     "spread": true,
     "superInFunctions": true,
-    "templateStrings": false,
+    "templateStrings": true,
     "unicodeCodePointEscapes": true,
     "globalReturn": true,
     "experimentalObjectRestSpread": true
