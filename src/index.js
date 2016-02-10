@@ -8,16 +8,13 @@ import chalk from 'chalk'
 import utils from './utils.js'
 export { utils } // allows all the utils to be used
 
-export default async function devsetup(options) {
-  options = options || {}
-  options.path = options.path
-  // let settings = require(path.join(__dirname, '.devsetup.js'))
 
-  options = {}
-  options.plugins = [
-    'apps'
-    // 'hybrid-development'
-  ]
+const default_options = {
+  config: '',
+  plugins: []
+}
+export default async function devsetup(options = default_options) {
+  // let settings = require(path.join(__dirname, '.devsetup.js'))
 
   try {
     const plugins = loadPlugins(options.plugins || [])
