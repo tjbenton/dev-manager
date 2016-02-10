@@ -6,7 +6,22 @@ import chalk from 'chalk'
 
 const toString = (arg) => Object.prototype.toString.call(arg).slice(8, -1).toLowerCase()
 
+/// @name loadPlugins
+/// @author Tyler Benton
+/// @description
+/// This is used to load the plugins to run
+///
+/// @arg {string, object, array} plugins - The plugins that you want to load
+///
+/// @returns {array} Returns a flat array of plugins
 export default function loadPlugins(plugins) {
+  if (
+    toString(plugins) === 'string' ||
+    toString(plugins) === 'object'
+  ) {
+    plugins = [ plugins ]
+  }
+
   let result = []
 
   // loop through the plugins list and create a single array of commands
@@ -47,10 +62,15 @@ export default function loadPlugins(plugins) {
       console.log(chalk.red('Error:'), 'each plugin must be an array of objects or a single object')
     }
 
-    // loop over each command in plugin and
+    // loop over each command in plugin and add their path
+    // and their index in the plugin
     for (let z = 0; z < plugin.length; z++) {
       plugin[z].path = plugin_path
       plugin[z].index = z
+
+      if (plugin[z].plugins) {
+        plugin[z].plugins = loadPlugins(plugin[z].plugins)
+      }
     }
 
     console.log(`Queued ${chalk.yellow(path.basename(plugin_path))}`)
