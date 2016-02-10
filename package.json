@@ -25,6 +25,9 @@
   "dependencies": {
     "babel-runtime": "^6.5.0",
     "chalk": "^1.1.1",
+    "commander": "^2.9.0",
+    "es6-promisify-all": "^0.1.0",
+    "fs-extra": "^0.26.5",
     "inquirer-promise": "0.0.3"
   },
   "devDependencies": {
