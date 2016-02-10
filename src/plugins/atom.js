@@ -1,9 +1,10 @@
 'use strict'
+import { run } from '../utils.js'
 
 export default [
   {
     command: 'apm install',
-    *pre(list) {
+    async pre(list) {
       // filter out already installed packages
     },
     list: [

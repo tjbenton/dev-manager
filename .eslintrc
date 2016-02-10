@@ -25,17 +25,37 @@
     "experimentalObjectRestSpread": true
   },
   "env": {
-    "jasmine": true,
     "node": true,
-    "mocha": true,
     "browser": true,
     "builtin": true
   },
+  "parser": "babel-eslint",
   "globals": {},
+  "plugins": [
+    "babel"
+  ],
   "rules": {
-    "array-bracket-spacing": [ 2, "always" ],
+    "babel/generator-star-spacing": [ 0, "before" ],
+    "generator-star-spacing": [ 0, "before" ],
+
+    "babel/new-cap": 2,
+    "new-cap": 0,
+
+    "babel/array-bracket-spacing": [ 2, "always" ],
+    "array-bracket-spacing": 0,
+
+    "babel/object-curly-spacing": [ 2, "always" ],
+    "object-curly-spacing": 0,
+
+    "babel/object-shorthand": [ 2, "always" ],
+    "object-shorthand": 0,
+
+    "babel/arrow-parens": [ 2, "always" ],
+    "arrow-parens": 0,
+
+    "babel/no-await-in-loop": 1,
+
     "arrow-body-style": [ 2, "as-needed" ],
-    "arrow-parens": [ 2, "always" ],
     "arrow-spacing": 2,
     "block-scoped-var": 2,
     "block-spacing": [ 2, "always" ],
@@ -54,7 +74,7 @@
     "eol-last": 2,
     "eqeqeq": [ 2, "allow-null" ],
     "func-names": 1,
-    "generator-star-spacing": [ 2, "before" ],
+
     "guard-for-in": 2,
     "id-length": [
       1,
@@ -82,7 +102,6 @@
     "max-nested-callbacks": [2, 3],
     "max-params": [ 1, 4 ],
     "max-statements": [ 1, 30 ],
-    "new-cap": 2,
     "new-parens": 2,
     "no-alert": 2,
     "no-array-constructor": 2,
@@ -153,8 +172,6 @@
     "no-void": 2,
     "no-warning-comments": [ 1, { "terms": [ "@todo", "@fix", "@fixme" ], "location": "start" } ],
     "no-with": 2,
-    "object-curly-spacing": [ 2, "always" ],
-    "object-shorthand": [ 2, "always" ],
     "one-var": [ 2, { "uninitialized": "always", "initialized": "never" } ],
     "operator-assignment": [ 2, "always" ],
     "operator-linebreak": [ 2, "after" ],

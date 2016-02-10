@@ -1,5 +1,5 @@
 'use strict'
-import utils from '../utils.js'
+import { run } from '../utils.js'
 
 export default [
   {
@@ -13,8 +13,8 @@ export default [
       'nativescript',
       'plugman', // used by cordova
     ],
-    *pre(list) {
-      var installed = yield utils.run('npm ls -g --depth=0', false)
+    async pre(list) {
+      var installed = await run('npm ls -g --depth=0', false)
 
       installed = installed
         .split('\n')
@@ -28,9 +28,9 @@ export default [
       // because they will be updated
       return list.filter((obj) => installed.indexOf(obj) < 0)
     },
-    *post() {
+    async post() {
       console.log('Updating existing npm packages')
-      yield utils.run('npm update -g')
+      await run('npm update -g')
       console.log('Hybrid npm packages have finished installing')
     }
   }

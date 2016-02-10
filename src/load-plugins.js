@@ -27,7 +27,7 @@ export default function loadPlugins(plugins) {
           } catch (err) {
             // try to load the package from this repo
             plugin_path = path.join(__dirname, 'plugins', plugin)
-            console.log(plugin_path)
+            // console.log(plugin_path)
             plugin = require(plugin_path)
           }
         }
@@ -52,6 +52,8 @@ export default function loadPlugins(plugins) {
       plugin[z].path = plugin_path
       plugin[z].index = z
     }
+
+    console.log(`Queued ${chalk.yellow(path.basename(plugin_path))}`)
 
     // update the result with the plugins
     result = [].concat(result, plugin)

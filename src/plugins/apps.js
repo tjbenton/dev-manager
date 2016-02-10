@@ -1,10 +1,12 @@
+'use strict'
+
 import { run } from '../utils.js'
 
 export default [
   {
     command: 'brew cask install',
-    *pre(list) {
-      var installed = yield run('brew cask list', false)
+    pre: async function pre(list) {
+      var installed = await run('brew cask list', false)
       return list.map((obj) => {
         if (typeof obj === 'string') {
           return installed.indexOf(obj.split(' ')[0]) < 0 ? obj : false

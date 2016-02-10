@@ -4,22 +4,22 @@ import chalk from 'chalk'
 import { inquire, runArray, run } from './utils.js'
 
 // this is used to run all of the plugins
-export default function *runPlugins(plugins) {
+export default async function runPlugins(plugins) {
   const running = []
 
   for (let i = 0; i < plugins.length; i++) {
     running.push(runPlugin(plugins[i]))
   }
 
-  return yield running
+  return await Promise.all(running)
 }
 
 
-function *runPlugin(plugin) {
+async function runPlugin(plugin) {
   try {
     // Try to run the `pre` defined in the plugin
     if (plugin.pre && plugin.list) {
-      plugin.list = yield plugin.pre(plugin.list)
+      plugin.list = await plugin.pre(plugin.list)
     }
   } catch (err) {
     console.log(
@@ -31,7 +31,7 @@ function *runPlugin(plugin) {
     )
 
     // check to see if they want to continue with the install
-    const question = yield inquire.choose(
+    const question = await inquire.choose(
       `Would you like to continue with the full list in for ${plugin.command}`,
       [ 'yes', 'no' ],
       {
@@ -50,14 +50,14 @@ function *runPlugin(plugin) {
 
   try {
     if (plugin.list) {
-      yield runArray(
+      await runArray(
         plugin.command,
         plugin.list,
         'inherit',
         true
       )
     } else {
-      yield run(plugin.command, 'inherit', true)
+      await run(plugin.command, 'inherit', true)
     }
   } catch (err) {
     console.log(chalk.red('Error:\n'), err)
@@ -65,7 +65,7 @@ function *runPlugin(plugin) {
 
   try {
     if (plugin.post) {
-      yield plugin.post()
+      await plugin.post(plugin.command, plugin.list)
     }
   } catch (err) {
     console.log(

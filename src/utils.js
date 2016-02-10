@@ -34,7 +34,7 @@ inquire.choose = function choose(message, choices, options) {
 export { inquire }
 
 
-export function *runArray(command, array, stdio, log) {
+export async function runArray(command, array, stdio, log) {
   try {
     const commands = []
     if (array.length) {
@@ -42,7 +42,7 @@ export function *runArray(command, array, stdio, log) {
         commands.push(run(command.trim() + ' ' + array[i], stdio, log))
       }
 
-      return yield commands
+      return await Promise.all(commands)
     }
 
     return commands

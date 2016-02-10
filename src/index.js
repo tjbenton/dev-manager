@@ -2,16 +2,13 @@
 
 // check to see which shell is currently running
 // ps -o comm= -p $$
-import co from 'co'
 import loadPlugins from './load-plugins.js'
 import runPlugins from './run-plugins.js'
 import chalk from 'chalk'
 import utils from './utils.js'
-export { utils } // allows all the utils to be used 
-const root = process.env.HOME
+export { utils } // allows all the utils to be used
 
-
-export default co.wrap(function *devsetup(options) {
+export default async function devsetup(options) {
   options = options || {}
   options.path = options.path
   // let settings = require(path.join(__dirname, '.devsetup.js'))
@@ -24,7 +21,7 @@ export default co.wrap(function *devsetup(options) {
 
   try {
     const plugins = loadPlugins(options.plugins || [])
-    yield runPlugins(plugins)
+    await runPlugins(plugins)
   } catch (err) {
     console.log(chalk.red('Error:'), err.stack)
   } finally {
@@ -42,7 +39,7 @@ export default co.wrap(function *devsetup(options) {
   // } catch (err) {
   //   // do nothing because the user settings don't exist
   // }
-})
+}
 
 
 // do app specific cleaning before exiting
