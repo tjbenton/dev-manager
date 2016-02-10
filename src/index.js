@@ -6,8 +6,10 @@ import co from 'co'
 import loadPlugins from './load-plugins.js'
 import runPlugins from './run-plugins.js'
 import chalk from 'chalk'
-
+import utils from './utils.js'
+export { utils } // allows all the utils to be used 
 const root = process.env.HOME
+
 
 export default co.wrap(function *devsetup(options) {
   options = options || {}
