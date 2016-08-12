@@ -1,5 +1,5 @@
 'use strict'
-import { run } from '../utils.js'
+import { exec } from '../utils.js'
 
 export default [
   {
@@ -14,7 +14,7 @@ export default [
       'plugman', // used by cordova
     ],
     async pre(list) {
-      var installed = await run('npm ls -g --depth=0', false)
+      var installed = await exec('npm ls -g --depth=0', false)
 
       installed = installed
         .split('\n')
@@ -30,7 +30,7 @@ export default [
     },
     async post() {
       console.log('Updating existing npm packages')
-      await run('npm update -g')
+      await exec('npm update -g')
       console.log('Hybrid npm packages have finished installing')
     }
   }

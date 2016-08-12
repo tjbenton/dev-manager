@@ -2,7 +2,7 @@
 
 // check to see which shell is currently running
 // ps -o comm= -p $$
-import loadPlugins from './load-plugins.js'
+import load from './load-plugins.js'
 import runPlugins from './run-plugins.js'
 import chalk from 'chalk'
 import utils from './utils.js'
@@ -11,13 +11,16 @@ export { utils } // allows all the utils to be used
 
 const default_options = {
   config: '',
+  presets: [],
   plugins: []
 }
 export default async function devsetup(options = default_options) {
   // let settings = require(path.join(__dirname, '.devsetup.js'))
 
   try {
-    const plugins = loadPlugins(options.plugins || [])
+    const presets = load(options.presets, 'presets')
+    const plugins = load(options.plugins, 'plugins')
+    await runPlugins(presets)
     await runPlugins(plugins)
   } catch (err) {
     console.log(chalk.red('Error:'), err.stack)

@@ -12,16 +12,19 @@ export default function cli() {
   program
     .version(pkg.version)
     .option('-c, --config [path]', 'Path to your `.devsetup.js`', '')
-    .option(`-p, --plugins '<names>'`, 'Comma seperated list of plugins', toList, [])
+    .option('-p, --presets <names>', 'Comma sperated list of presets', toList, [])
+    .option(`-z, --plugins '<names>'`, 'Comma seperated list of plugins', toList, [])
     .parse(process.argv)
 
   const {
     config,
+    presets,
     plugins
   } = program
 
   devsetup({
     config,
+    presets,
     plugins
   })
 }

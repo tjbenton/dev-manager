@@ -39,12 +39,12 @@ const fs = promisify(fsExtra)
 export { fs }
 
 
-export async function runArray(command, array, stdio, log) {
+export async function execArray(command, array, stdio, log) {
   try {
     const commands = []
     if (array.length) {
       for (let i = 0; i < array.length; i++) {
-        commands.push(run(command.trim() + ' ' + array[i], stdio, log))
+        commands.push(exec(command.trim() + ' ' + array[i], stdio, log))
       }
 
       return await Promise.all(commands)
@@ -64,7 +64,7 @@ export async function runArray(command, array, stdio, log) {
 ///  - 'inherit' will let the command that you run to have control over what's output
 ///  - 'pipe' will take over the `process.stdout`. This can cause issues if the commands you're running have questions or action items.
 /// @arg {boolean} log [false] - Determins if you want output the stdout or not. Only applies if `stdio` is set to 'pipe'
-export function run(command, stdio, log) {
+export function exec(command, stdio, log) {
   // enviroment to use where the commands that are run
   // will output in full color
   const env = process.env

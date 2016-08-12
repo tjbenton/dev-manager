@@ -9,7 +9,7 @@
 ////
 
 import chalk from 'chalk'
-import { inquire, runArray, run } from './utils.js'
+import { inquire, execArray, exec } from './utils.js'
 
 /// @name runPlugins
 /// @description
@@ -48,6 +48,10 @@ export default runPlugins
 /// }
 /// ```
 async function runPlugin(plugin) {
+  if (plugin.presets) {
+    await runPlugins(plugin.presets)
+  }
+  
   if (plugin.plugins) {
     await runPlugins(plugin.plugins)
   }
@@ -86,14 +90,14 @@ async function runPlugin(plugin) {
 
   try {
     if (plugin.list) {
-      await runArray(
+      await execArray(
         plugin.command,
         plugin.list,
         'inherit',
         true
       )
     } else {
-      await run(plugin.command, 'inherit', true)
+      await exec(plugin.command, 'inherit', true)
     }
   } catch (err) {
     console.log(chalk.red('Error:\n'), err)

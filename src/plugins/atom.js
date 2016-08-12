@@ -1,5 +1,5 @@
 'use strict'
-import { run } from '../utils.js'
+import { exec } from '../utils.js'
 
 export default [
   {

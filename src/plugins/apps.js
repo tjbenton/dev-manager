@@ -1,12 +1,15 @@
 'use strict'
 
-import { run } from '../utils.js'
+import { exec } from '../utils.js'
 
 export default [
   {
     command: 'brew cask install',
-    pre: async function pre(list) {
-      var installed = await run('brew cask list', false)
+    plugins: [
+      'scss'
+    ],
+    async pre(list) {
+      var installed = await exec('brew cask list', false)
       return list.map((obj) => {
         if (typeof obj === 'string') {
           return installed.indexOf(obj.split(' ')[0]) < 0 ? obj : false
