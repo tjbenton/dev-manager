@@ -1,0 +1,18 @@
+{
+  "author": "Tyler Benton <tjbenton21@gmail.com> (https://github.com/tjbenton)",
+  "name": "dev-manager-plugin-atom",
+  "version": "0.0.0-alpha-0.1",
+  "description": "A setup script for development enviroments",
+  "main": "dist/index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjbenton/dev-manager.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tjbenton/dev-manager/issues"
+  },
+  "homepage": "https://github.com/tjbenton/dev-manager#readme",
+  "dependencies": {}
+}

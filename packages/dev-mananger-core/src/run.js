@@ -9,28 +9,9 @@
 ////
 
 import chalk from 'chalk'
-import { inquire, execArray, exec } from './utils.js'
-
-/// @name runPlugins
-/// @description
-/// this is used to run all of the plugins
-/// @async
-/// @arg {array} - Accepts an array of objects
-///
-/// @returns {array/promises}
-async function runPlugins(plugins) {
-  const running = []
-
-  for (let i = 0; i < plugins.length; i++) {
-    running.push(runPlugin(plugins[i]))
-  }
-
-  return await Promise.all(running)
-}
-
-export default runPlugins
-
-
+import utils from './utils'
+const { inquire, execArray, exec } = utils
+import { forEach } from 'async-array-methods'
 /// @name runPlugin
 /// @description
 /// A helper function to run a single plugin
@@ -47,19 +28,19 @@ export default runPlugins
 ///   index: 0 // index of the command in the plugin
 /// }
 /// ```
-async function runPlugin(plugin) {
+export default async function run(plugin) {
   if (plugin.presets) {
-    await runPlugins(plugin.presets)
+    await forEach(plugin.presets, run)
   }
-  
+
   if (plugin.plugins) {
-    await runPlugins(plugin.plugins)
+    await forEach(plugin.plugins, run)
   }
 
   if (plugin.pre && plugin.list) {
     try {
       // Try to run the `pre` defined in the plugin
-      plugin.list = await plugin.pre(plugin.list)
+      plugin.list = await plugin.pre.call(utils, plugin.list)
     } catch (err) {
       console.log(
         chalk.red('Error:'), '\n',
@@ -84,7 +65,7 @@ async function runPlugin(plugin) {
         return `${plugin.command} pre function was skipped because of an issue with it`
       }
 
-      process.exit()
+      process.exit(1)
     }
   }
 

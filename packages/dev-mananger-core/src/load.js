@@ -14,7 +14,7 @@ const toString = (arg) => Object.prototype.toString.call(arg).slice(8, -1).toLow
 /// @arg {string, object, array} plugins - The plugins that you want to load
 ///
 /// @returns {array} Returns a flat array of plugins
-export default function load(objs, type) {
+export default function load(objs, type) { // eslint-disable-line
   if (
     toString(objs) === 'string' ||
     toString(objs) === 'object'
@@ -38,7 +38,7 @@ export default function load(objs, type) {
           try {
             // try to load the obj from node package
             obj_path = obj
-            obj = require(`devsetup-${type}-${obj}`)
+            obj = require(`dev-mananger-${type}-${obj}`)
           } catch (err) {
             // try to load the package from this repo
             obj_path = path.join(__dirname, type, obj)

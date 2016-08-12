@@ -1,0 +1,25 @@
+{
+  "author": "Tyler Benton <tjbenton21@gmail.com> (https://github.com/tjbenton)",
+  "name": "dev-manager-core",
+  "version": "0.0.0-alpha-0.1",
+  "description": "A setup script for development enviroments",
+  "main": "dist/index.js",
+  "bin": {
+    "mananger": "dist/cli.js"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjbenton/dev-manager.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tjbenton/dev-manager/issues"
+  },
+  "homepage": "https://github.com/tjbenton/dev-manager#readme",
+  "dependencies": {
+    "async-array-methods": "^2.1.0",
+    "commander": "^2.9.0",
+    "chalk": "^1.1.3"
+  }
+}

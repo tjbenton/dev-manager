@@ -1,7 +1,7 @@
 'use strict'
 
 import program from 'commander'
-import devsetup from './index.js'
+import devMananger from './index.js'
 import pkg from '../package.json'
 
 export default function cli() {
@@ -11,9 +11,9 @@ export default function cli() {
 
   program
     .version(pkg.version)
-    .option('-c, --config [path]', 'Path to your `.devsetup.js`', '')
+    .option('-c, --config [path]', 'Path to your `.dev-mananger.js`', '')
     .option('-p, --presets <names>', 'Comma sperated list of presets', toList, [])
-    .option(`-z, --plugins '<names>'`, 'Comma seperated list of plugins', toList, [])
+    .option('-z, --plugins "<names>"', 'Comma seperated list of plugins', toList, [])
     .parse(process.argv)
 
   const {
@@ -22,7 +22,7 @@ export default function cli() {
     plugins
   } = program
 
-  devsetup({
+  devMananger({
     config,
     presets,
     plugins

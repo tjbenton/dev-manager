@@ -1,5 +1,5 @@
 'use strict'
-import { exec } from '../utils.js'
+import { exec } from 'dev-mananger-helpers-utils'
 
 export default [
   {

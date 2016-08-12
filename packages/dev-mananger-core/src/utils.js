@@ -33,11 +33,7 @@ inquire.choose = function choose(message, choices, options) {
 
 export { inquire }
 
-import promisify from 'es6-promisify-all'
-import fsExtra from 'fs-extra'
-const fs = promisify(fsExtra)
-export { fs }
-
+import fs from 'fs-extra-promisify'
 
 export async function execArray(command, array, stdio, log) {
   try {
