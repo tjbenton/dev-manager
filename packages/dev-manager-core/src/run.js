@@ -9,10 +9,11 @@
 ////
 
 import chalk from 'chalk'
-import utils from './utils'
-const { inquire, execArray, exec } = utils
-import { forEach } from 'async-array-methods'
-/// @name runPlugin
+import { inquire, exec } from './utils'
+import array, { forEach } from 'async-array-methods'
+const utils = { inquire, exec, ...array }
+
+/// @name run
 /// @description
 /// A helper function to run a single plugin
 /// @async
@@ -25,7 +26,8 @@ import { forEach } from 'async-array-methods'
 ///   async pre() {}, // runs before the command
 ///   async post() {}, // runs after the command is complete
 ///   path: '', // path to the plugin location
-///   index: 0 // index of the command in the plugin
+///   index: 0, // index of the command in the plugin
+///   pkg: '' // name of the plugin
 /// }
 /// ```
 export default async function run(plugin) {
@@ -71,12 +73,9 @@ export default async function run(plugin) {
 
   try {
     if (plugin.list) {
-      await execArray(
-        plugin.command,
-        plugin.list,
-        'inherit',
-        true
-      )
+      await forEach(plugin.list, (pkg) => {
+        return exec(plugin.command.trim() + ' ' + pkg, 'inherit', true)
+      })
     } else {
       await exec(plugin.command, 'inherit', true)
     }

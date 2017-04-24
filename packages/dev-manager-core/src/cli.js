@@ -12,8 +12,8 @@ export default function cli() {
   program
     .version(pkg.version)
     .option('-c, --config [path]', 'Path to your `.dev-mananger.js`', '')
-    .option('-p, --presets <names>', 'Comma sperated list of presets', toList, [])
-    .option('-z, --plugins "<names>"', 'Comma seperated list of plugins', toList, [])
+    .option('-b, --presets <names>', 'Comma sperated list of presets', toList, [])
+    .option('-p, --plugins "<names>"', 'Comma seperated list of plugins', toList, [])
     .parse(process.argv)
 
   const {

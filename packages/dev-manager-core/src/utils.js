@@ -33,25 +33,6 @@ inquire.choose = function choose(message, choices, options) {
 
 export { inquire }
 
-import fs from 'fs-extra-promisify'
-
-export async function execArray(command, array, stdio, log) {
-  try {
-    const commands = []
-    if (array.length) {
-      for (let i = 0; i < array.length; i++) {
-        commands.push(exec(command.trim() + ' ' + array[i], stdio, log))
-      }
-
-      return await Promise.all(commands)
-    }
-
-    return commands
-  } catch (err) {
-    console.error(err)
-  }
-}
-
 /// @name run
 /// @description
 /// Helper function to command line commands from node in an async way
@@ -117,4 +98,22 @@ export function exec(command, stdio, log) {
       log && console.log('Finished:', full_command)
     })
   })
+}
+
+
+export async function exists(command) {
+
+}
+
+export async function brew(pkg) {
+  await exec(`brew ls --versions ${pkg}`)
+  await exec(`brew info ${pkg}`)
+}
+
+export async function brewCask(pkg) {
+
+}
+
+export async function npm() {
+
 }

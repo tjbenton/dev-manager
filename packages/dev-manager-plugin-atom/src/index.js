@@ -1,5 +1,4 @@
 'use strict'
-import { exec } from '../utils.js'
 
 export default [
   {

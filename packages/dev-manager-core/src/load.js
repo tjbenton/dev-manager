@@ -3,8 +3,7 @@
 
 import path from 'path'
 import chalk from 'chalk'
-
-const toString = (arg) => Object.prototype.toString.call(arg).slice(8, -1).toLowerCase()
+import to from 'to-js'
 
 /// @name loadPlugins
 /// @author Tyler Benton
@@ -14,23 +13,18 @@ const toString = (arg) => Object.prototype.toString.call(arg).slice(8, -1).toLow
 /// @arg {string, object, array} plugins - The plugins that you want to load
 ///
 /// @returns {array} Returns a flat array of plugins
-export default function load(objs, type) { // eslint-disable-line
-  if (
-    toString(objs) === 'string' ||
-    toString(objs) === 'object'
-  ) {
-    objs = [ objs ]
-  }
-
+export default function load(objs, kind) { // eslint-disable-line
+  objs = to.array(objs)
   let result = []
 
   // loop through the plugins list and create a single array of commands
   for (let i = 0; i < objs.length; i++) {
     let obj = objs[i]
-    const obj_type = toString(obj)
+    const pkg = `dev-manager-${kind}-${obj}`
+    const type = to.type(obj)
     let obj_path
 
-    if (obj_type === 'string') {
+    if (type === 'string') {
       try {
         if (obj[0] === '.') {
           obj = require(path.join(__dirname, obj))
@@ -38,16 +32,15 @@ export default function load(objs, type) { // eslint-disable-line
           try {
             // try to load the obj from node package
             obj_path = obj
-            obj = require(`dev-mananger-${type}-${obj}`)
+            obj = require(pkg)
           } catch (err) {
             // try to load the package from this repo
-            obj_path = path.join(__dirname, type, obj)
-            // console.log(obj_path)
+            obj_path = path.join(__dirname, '..', '..', pkg)
             obj = require(obj_path)
           }
         }
       } catch (err) {
-        console.log(chalk.red(`Error loading ${type}:`))
+        console.log(chalk.red(`Error loading ${pkg}:`))
         console.error(err.stack)
       } finally {
         // this handles plugins that where written in es6
@@ -56,9 +49,9 @@ export default function load(objs, type) { // eslint-disable-line
           obj = obj.default
         }
       }
-    } else if (obj_type === 'object') {
+    } else if (type === 'object') {
       obj = [ obj ]
-    } else if (obj_type !== 'array') {
+    } else if (type !== 'array') {
       console.log(chalk.red('Error:'), 'each plugin must be an array of objects or a single object')
     }
 
@@ -68,13 +61,14 @@ export default function load(objs, type) { // eslint-disable-line
       const item = obj[z]
       obj[z].path = obj_path
       obj[z].index = z
+      obj[z].pkg = pkg
 
       if (item.plugins) {
-        obj[z].plugins = load(item.plugins)
+        obj[z].plugins = load(item.plugins, 'plugin')
       }
 
       if (item.presets) {
-        obj[z].presets = load(item.presets)
+        obj[z].presets = load(item.presets, 'preset')
       }
     }
 

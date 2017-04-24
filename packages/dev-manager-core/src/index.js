@@ -3,21 +3,16 @@
 // check to see which shell is currently running
 // ps -o comm= -p $$
 import load from './load.js'
+import chalk from 'chalk'
 import run from './run.js'
 import { forEach } from 'async-array-methods'
-import chalk from 'chalk'
 
-const default_options = {
-  config: '',
-  presets: [],
-  plugins: []
-}
-
-export default async function devManager(options = default_options) {
+export default async function devManager(options = { config: '', presets: [], plugins: [] }) {
   // let settings = require(path.join(__dirname, '.dev-manager.js'))
+
   try {
-    const presets = load(options.presets, 'presets')
-    const plugins = load(options.plugins, 'plugins')
+    const presets = load(options.presets, 'preset')
+    const plugins = load(options.plugins, 'plugin')
     await forEach(presets, run)
     await forEach(plugins, run)
   } catch (err) {
